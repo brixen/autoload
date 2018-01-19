@@ -1,55 +1,73 @@
-puts
-puts "---- context #{File.expand_path __FILE__}: start ----"
-puts
-
 $: << __dir__
 
-puts "context #{File.expand_path __FILE__}: " \
-      "before autoload A::B defined: defined? A::B"
-p defined? A::B
+puts "in #{__FILE__}"
+
+p defined? A::B             # => nil
+p defined? A::C             # => nil
+puts
 
 class A
-  puts "context #{File.expand_path __FILE__}, #{self.name}: " \
-        "before autoload B defined: defined? B"
-  p defined? B
+  autoload :B, 'a/b'
+  autoload :C, 'a/c'
+  autoload :E, 'a/e'
 
-  puts "context #{File.expand_path __FILE__}, #{self.name}: " \
-        "before autoload B defined: defined? A::B"
-  p defined? A::B
+  p defined? B              # => "constant"
+  p defined? A::B           # => "constant"
+  p defined? C              # => "constant"
+  p defined? A::C           # => "constant"
+  puts
 
-  puts "context #{File.expand_path __FILE__}, #{self.name}: autoload :B, 'a/b'"
-  autoload :B, "a/b"
+  p A.const_defined? :B     # => true
+  p const_defined? :B       # => true
+  puts
 
-  puts "context #{File.expand_path __FILE__}, #{self.name}: " \
-        "after autoload B defined: defined? B"
-  p defined? B
-
-  puts "context #{File.expand_path __FILE__}, #{self.name}: " \
-        "after autoload B defined: defined? A::B"
-  p defined? A::B
-
-  puts "context #{File.expand_path __FILE__}, #{self.name}: autoload :C, 'a/c'"
-  autoload :C, "a/c"
-
-  puts "context #{File.expand_path __FILE__}, #{self.name}: autoload :E, 'a/e'"
-  autoload :E, "a/e"
+  p A.const_defined? :C     # => true
+  p const_defined? :C       # => true
+  puts
 end
 
-puts "context #{File.expand_path __FILE__}: after autoload A::B defined: defined? A::B"
-p defined? A::B
+p defined? A::B             # => "constant"
+p defined? A::C             # => "constant"
+puts
 
-puts "context #{File.expand_path __FILE__}: after autoload A::C defined: defined? A::C"
-p defined? A::C
+p A.const_defined? :B       # => true
+p A.const_defined? :C       # => true
+puts
 
-puts "contetx #{File.expand_path __FILE__}: require triggering autoload triggering autoload"
-require "c"
+class AA < A
+  p defined? B              # => "constant"
+  p defined? A::B           # => "constant"
+  p defined? C              # => "constant"
+  p defined? A::C           # => "constant"
+  puts
 
-puts "context #{File.expand_path __FILE__}: " \
-      "autoload triggering require triggering autoload: defined? A::B"
-puts "context #{File.expand_path __FILE__}: p A::B"
+  p A.const_defined? :B     # => true
+  p const_defined? :B       # => true
+  puts
+
+  p A.const_defined? :C     # => true
+  p const_defined? :C       # => true
+  puts
+end
+
+p defined? AA::B            # => "constant"
+p defined? AA::C            # => "constant"
+puts
+
+p AA.const_defined? :B      # => true
+p AA.const_defined? :C      # => true
+
+puts
+puts "triggering autoload: A::B"
 p A::B
 
+puts
+puts "running require 'c'"
+require "c"
 
 puts
-puts "---- context #{File.expand_path __FILE__}: finished ----"
+puts "running require 'a/e'"
+require "a/e"
+
 puts
+puts "done #{__FILE__}"

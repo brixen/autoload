@@ -1,75 +1,116 @@
+$: << __dir__
+
 puts
-puts "---- context #{__FILE__}: start ----"
+puts "in #{__FILE__}"
+
+p defined? A::B             # => "constant"
+p defined? A::C             # => nil
 puts
-
-puts "context #{__FILE__}: before A::C defined: defined? A::B"
-p defined? A::B
-
-puts "context #{__FILE__}: before A::C defined: defined? A::C"
-p defined? A::C
-
-puts "context #{__FILE__}: before A::C defined: defined? A::D"
-p defined? A::D
 
 class A
-  puts "context #{__FILE__}, #{self.name}: before D defined: defined? B"
-  p defined? B
+  p defined? B              # => "constant"
+  p defined? A::B           # => "constant"
+  p defined? C              # => "constant"
+  p defined? A::C           # => nil"
+  puts
 
-  puts "context #{__FILE__}, #{self.name}: before D defined: defined? A::B"
-  p defined? A::D
+  p A.const_defined? :B     # => true
+  p const_defined? :B       # => true
+  puts
 
-  puts "context #{__FILE__}, #{self.name}: before D defined: defined? C"
-  p defined? C
-
-  puts "context #{__FILE__}, #{self.name}: before D defined: defined? A::C"
-  p defined? A::C
-
-  puts "context #{__FILE__}, #{self.name}: before D defined: defined? D"
-  p defined? D
-
-  puts "context #{__FILE__}, #{self.name}: before D defined: defined? A::D"
-  p defined? A::D
-
-  puts "context #{__FILE__}, #{self.name}: autoload :D, 'a/d'"
-  autoload :D, "a/d"
-
-  puts "context #{__FILE__}, #{self.name}: after D defined: defined? B"
-  p defined? B
-
-  puts "context #{__FILE__}, #{self.name}: after D defined: defined? A::B"
-  p defined? A::B
-
-  puts "context #{__FILE__}, #{self.name}: after D defined: defined? C"
-  p defined? C
-
-  puts "context #{__FILE__}, #{self.name}: after D defined: defined? A::D"
-  p defined? A::D
-
-  puts "context #{__FILE__}, #{self.name}: after D defined: defined? D"
-  p defined? D
-
-  puts "context #{__FILE__}, #{self.name}: after D defined: defined? A::D"
-  p defined? A::D
-
-  puts "context #{__FILE__}, #{self.name}: C = 1"
-  C = 1
-
-  puts "context #{__FILE__}, #{self.name}: after C set: defined? C"
-  p defined? C
-
-  puts "context #{__FILE__}, #{self.name}: after C set: defined? A::C"
-  p defined? A::C
-
-  puts "context #{__FILE__}, #{self.name}: p D"
-  p D
-
-  puts "context #{__FILE__}, #{self.name}: after p D, defined? D"
-  p defined? D
-
-  puts "context #{__FILE__}, #{self.name}: after p D, defined? A::D"
-  p defined? A::D
+  p A.const_defined? :C     # => false
+  p const_defined? :C       # => false
+  puts
 end
 
+p defined? A::B             # => "constant"
+p defined? A::C             # => nil"
 puts
-puts "---- context #{__FILE__}: finished ----"
+
+p A.const_defined? :B       # => true
+p A.const_defined? :C       # => false
 puts
+
+class AA < A
+  p defined? B              # => "constant"
+  p defined? A::B           # => "constant"
+  p defined? C              # => nil
+  p defined? A::C           # => nil
+  puts
+
+  p A.const_defined? :B     # => true
+  p const_defined? :B       # => true
+  puts
+
+  p A.const_defined? :C     # => false
+  p const_defined? :C       # => false
+  puts
+end
+
+p defined? AA::B            # => "constant"
+p defined? AA::C            # => nil
+puts
+
+p AA.const_defined? :B      # => true
+p AA.const_defined? :C      # => false
+
+class A
+  puts
+  puts "defining C = 2"
+  puts
+  C = 2
+end
+
+p defined? A::B             # => "constant"
+p defined? A::C             # => "constant"
+puts
+
+class A
+  p defined? B              # => "constant"
+  p defined? A::B           # => "constant"
+  p defined? C              # => "constant"
+  p defined? A::C           # => "constant"
+  puts
+
+  p A.const_defined? :B     # => true
+  p const_defined? :B       # => true
+  puts
+
+  p A.const_defined? :C     # => true
+  p const_defined? :C       # => true
+  puts
+end
+
+p defined? A::B             # => "constant"
+p defined? A::C             # => "constant"
+puts
+
+p A.const_defined? :B       # => true
+p A.const_defined? :C       # => true
+puts
+
+class AA < A
+  p defined? B              # => "constant"
+  p defined? A::B           # => "constant"
+  p defined? C              # => "constant"
+  p defined? A::C           # => "constant"
+  puts
+
+  p A.const_defined? :B     # => true
+  p const_defined? :B       # => true
+  puts
+
+  p A.const_defined? :C     # => true
+  p const_defined? :C       # => true
+  puts
+end
+
+p defined? AA::B            # => "constant"
+p defined? AA::C            # => "constant"
+puts
+
+p AA.const_defined? :B      # => true
+p AA.const_defined? :C      # => true
+
+puts
+puts "done #{__FILE__}"
