@@ -58,12 +58,12 @@ p AA.const_defined? :B      # => true
 p AA.const_defined? :C      # => true
 
 puts
-puts "triggering autoload: A::B"
-p A::B
-
-puts
 puts "running require 'c'"
 require "c"
+
+puts
+puts "triggering autoload: A::B"
+p A::B
 
 puts
 puts "running require 'a/e'"
