@@ -58,6 +58,16 @@ puts
 p A.const_defined? :E       # => true
 puts
 
+class AA < A
+  p defined? E              # => nil
+  p defined? A::E           # => nil
+  puts
+
+  p A.const_defined? :E     # => false
+  p const_defined? :E       # => false
+  puts
+end
+
 p defined? AA::E            # => "constant"
 puts
 
