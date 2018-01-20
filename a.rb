@@ -17,6 +17,11 @@ class A
   p defined? A::C           # => "constant"
   puts
 
+  class AAA < A
+    p defined? E            # => "constant"
+    puts
+  end
+
   p A.const_defined? :B     # => true
   p const_defined? :B       # => true
   puts

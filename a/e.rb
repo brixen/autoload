@@ -11,8 +11,18 @@ class A
   p defined? A::E           # => nil
   puts
 
+  class AAA < A
+    p defined? E            # => "constant"
+    puts
+  end
+
   p A.const_defined? :E     # => false
   p const_defined? :E       # => false
+  puts
+end
+
+class AAA < A
+  p defined? E              # => nil
   puts
 end
 
